@@ -1,66 +1,78 @@
-# ParkWise — Exercise 2
+# ParkWise Exercise 2
 
-An early collaborative Java coursework exercise for a parking-management system. It is preserved as a coursework artifact for portfolio review; it is not presented as production software or as the work of one author.
+ParkWise Exercise 2 is a collaborative Java coursework project focused on an administrator-facing parking-management workflow. It is presented as an academic portfolio artifact, not as a production-ready application or a claim of sole authorship.
 
-## Confirmed scope
+## What the source implements
 
-The source includes:
+- A Swing administrator interface for inspecting and operating parking conveyors.
+- Parking-lot, vehicle, client, parking-session, conveyor, and price-list domain classes.
+- Database-backed conveyor status, diagnostics, weight-management, and simulated work operations.
+- Gson-based import of price-list JSON from `irs_prices_2026.json` into the local database.
+- Annual-summary and club-growth report-controller paths.
 
-- a Swing-based administrator interface;
-- parking-lot, vehicle, client, parking-session, conveyor, and price-list domain classes;
-- conveyor and parking-lot controllers;
-- JSON price-list import using Gson;
-- an Access-database connection through UCanAccess; and
-- a report-controller exercise. Its PDF/XML report-generation helpers are explicitly simulated in the current source, so they should not be treated as complete document export.
+The controller simulates conveyor diagnostics and work. The annual PDF/XML helpers in `ReportsController` are explicitly simulated. The administrator UI also contains simple XML and synthetic PDF output methods, but these were not executed or validated.
 
-## Technology
+## Technology and dependencies
 
-- Java, compiled artifact inspected at Java 17; use JDK 21 for the documented commands.
-- Swing and the Java standard library.
-- Gson 2.10.1.
-- UCanAccess 5.0.1 and its Access-driver dependencies.
-- Microsoft Access database (`ParkWiseDB.accdb`) as a local runtime prerequisite.
+- JDK 21 - used to compile the source successfully during repository preparation.
+- Java Swing - desktop administrator interface.
+- Gson 2.10.1 - JSON parsing.
+- Microsoft Access through UCanAccess 5.0.1 - required at runtime but not included in this repository.
+- Retained UCanAccess support JARs: Jackcess 3.0.1, HSQLDB 2.5.0, Apache Commons Lang 3.8.1, and Apache Commons Logging 1.2.
 
 No Maven or Gradle build is included.
 
-## Source layout
+## Project structure
 
 ```text
 src/
-├── App.java                 # application entry point
-├── boundaries/              # Swing UI and external-system interfaces
-├── control/                 # parking, conveyor, pricing, and report logic
-├── entity/                  # domain objects
-├── enums/                   # domain enumerations
-├── utils/                   # database connection and JSON parsing
-└── lib/                     # retained local dependency JARs
+|- App.java       application entry point
+|- boundaries/    Swing UI and external-system interfaces
+|- control/       parking, conveyor, pricing, and reporting logic
+|- entity/        parking-domain objects
+|- enums/         domain enumerations
+|- utils/         database connection and JSON parsing helpers
+`- lib/           retained dependency JARs
 ```
 
-## Local setup
+`App` is the application entry point. It performs database, price-list import, and report-controller calls before opening the administrator UI.
 
-1. Install JDK 21. On this checkout, `javac` and `java` may resolve to different installations; use the `java.exe` in the same JDK `bin` directory as `javac.exe`.
-2. Obtain the UCanAccess 5.0.1 driver from the [official UCanAccess distribution](https://ucanaccess.sourceforge.net/site.html), then set `C:\path\to\ucanaccess-5.0.1.jar` below to that driver JAR. UCanAccess also requires its runtime dependencies on the classpath. This project retains several related JARs in `src/lib` (including Jackcess, HSQLDB, and Apache Commons), but the complete local setup has not been independently runtime-verified; treat it as a prerequisite to verify locally.
-3. Place a reviewed local copy of `ParkWiseDB.accdb` in the project root. It is deliberately ignored and is not supplied for publication.
-4. Keep `irs_prices_2026.json` in the project root; `App` reads it by this relative name.
+## Prerequisites
 
-From PowerShell on Windows:
+1. JDK 21. Use `java.exe` from the same JDK installation as `javac.exe`.
+2. The UCanAccess 5.0.1 driver JAR, obtained separately from the [official UCanAccess distribution](https://ucanaccess.sourceforge.net/site.html). Its required runtime dependencies must also be available on the classpath.
+3. A reviewed local `ParkWiseDB.accdb` in the repository root. The application uses this relative path at runtime; the database is deliberately not included in the repository.
+4. `irs_prices_2026.json` in the repository root. `App` directly reads this file by name.
+
+The repository retains several UCanAccess support JARs in `src/lib`, but it does not contain the UCanAccess driver itself. The complete runtime dependency setup remains a local prerequisite and has not been independently verified.
+
+## Compile and launch (Windows PowerShell)
+
+From the repository root:
 
 ```powershell
 $jdk = 'C:\path\to\jdk-21\bin'
+$ucanaccess = 'C:\path\to\ucanaccess-5.0.1.jar'
+if (-not (Test-Path $ucanaccess)) { throw 'Set $ucanaccess to the UCanAccess 5.0.1 driver JAR.' }
 $sources = Get-ChildItem src -Recurse -Filter *.java | ForEach-Object FullName
-& "$jdk\javac.exe" -cp 'src\lib\*;C:\path\to\ucanaccess-5.0.1.jar' -d out $sources
-& "$jdk\java.exe" -cp 'out;src\lib\*;C:\path\to\ucanaccess-5.0.1.jar' App
+New-Item -ItemType Directory -Force out | Out-Null
+& "$jdk\javac.exe" -encoding UTF-8 -cp "src\lib\*;$ucanaccess" -d out $sources
+& "$jdk\java.exe" -cp "out;src\lib\*;$ucanaccess" App
 ```
 
-The classpath separator is `;` on Windows and `:` on macOS/Linux. The Swing UI and `Desktop` integration are desktop-environment dependent; they have not been validated on non-Windows systems.
+The source compilation step was verified with JDK 21 and the retained `src/lib` JARs. The complete launch command reflects the actual `App` entry point and its required UCanAccess driver, but it was not runtime-tested against a database. Running `App` may insert price-list data, generate report outputs, and open a Swing window.
 
-## Known limitations and validation status
+Windows uses `;` as the classpath separator. On macOS or Linux, replace it with `:`; desktop and `Desktop` integration behavior has not been validated outside Windows.
 
-- Runtime operation depends on the unreviewed local Access database and the separately supplied UCanAccess driver.
-- The main program performs database, price-import, and report-controller exercise calls before opening the administrator UI; it may alter local database data when run.
-- No automated test suite or build automation was found.
-- The source compiled successfully with JDK 21 during repository preparation. No database-backed or GUI runtime check was performed because the local database is unreviewed.
+## Validation status and limitations
 
-## Repository hygiene
+- Confirmed: all Java source compiled successfully with JDK 21 using the retained `src/lib` JARs.
+- Not tested: UCanAccess driver setup, database connectivity, JSON import execution, conveyor operations, Swing interaction, and report output.
+- The report-controller PDF/XML helpers are simulations; do not represent them as verified document export.
+- No automated tests or build automation were found.
 
-The ignore rules exclude local databases, Access lock files, build output, packaged JARs, and generated reports. The supplied library JARs and source JSON input are intentionally not ignored. Review course-sharing rules and obtain all collaborators' consent before publishing any version of this coursework.
+## Local data and repository hygiene
+
+The `.gitignore` excludes the local Access database and lock files, compiled output, the packaged application JAR, and generated report outputs. This includes the output names used by both the report controller and administrator UI.
+
+Third-party JARs are retained for the coursework setup. Apache Commons Lang and Commons Logging include Apache 2.0 license information; review the licensing and redistribution terms of all third-party JARs, including externally obtained UCanAccess artifacts, before making the repository public.
