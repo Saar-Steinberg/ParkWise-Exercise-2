@@ -75,4 +75,4 @@ Windows uses `;` as the classpath separator. On macOS or Linux, replace it with 
 
 The `.gitignore` excludes the local Access database and lock files, compiled output, the packaged application JAR, and generated report outputs. This includes the output names used by both the report controller and administrator UI.
 
-Third-party JARs are retained for the coursework setup. Apache Commons Lang and Commons Logging include Apache 2.0 license information; review the licensing and redistribution terms of all third-party JARs, including externally obtained UCanAccess artifacts, before making the repository public.
+Third-party JARs are retained for the coursework setup. Apache Commons Lang and Commons Logging include Apache 2.0 license information, and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) summarizes the verified HSQLDB 2.5.0 licensing evidence. Review the licensing and redistribution terms of all third-party JARs, including externally obtained UCanAccess artifacts, before making the repository public.
