@@ -1,0 +1,32 @@
+[
+  {
+    "parkingLotId": 1,
+    "effectiveDate": "2026-01-01",
+    "currency": "ILS",
+    "rates": {
+      "firstHour": 25.0,
+      "extraHour": 12.0,
+      "fullDay": 90.0
+    }
+  },
+  {
+    "parkingLotId": 2,
+    "effectiveDate": "2026-01-01",
+    "currency": "ILS",
+    "rates": {
+      "firstHour": 18.0,
+      "extraHour": 6.0,
+      "fullDay": 55.0
+    }
+  },
+  {
+    "parkingLotId": 3,
+    "effectiveDate": "2026-01-01",
+    "currency": "ILS",
+    "rates": {
+      "firstHour": 22.0,
+      "extraHour": 9.0,
+      "fullDay": 70.0
+    }
+  }
+]

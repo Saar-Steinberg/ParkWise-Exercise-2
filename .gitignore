@@ -1,0 +1,20 @@
+# Java build output
+bin/
+out/
+*.class
+
+# Locally packaged application artifact
+EX2_Park_Wise.jar
+
+# Unreviewed local Access database and its lock files
+ParkWiseDB.accdb
+*.laccdb
+
+# Runtime-generated reports
+AnnualReport_*.pdf
+AnnualReport_*.xml
+ClubGrowthReport_*.txt
+
+# Keep the portable editor configuration only
+.vscode/*
+!.vscode/settings.json
